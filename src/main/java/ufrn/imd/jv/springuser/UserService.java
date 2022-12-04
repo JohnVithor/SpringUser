@@ -26,10 +26,10 @@ public class UserService {
     }
 
     public UserEntity save(UserEntity userEntity) {
-        if(userEntity.getUsername() != null) {
+        if(userEntity.getUsername() == null) {
             throw new RuntimeException("Nome do usuario não informado");
         }
-        if(!userEntity.getUsername().trim().equals("")) {
+        if(userEntity.getUsername().trim().equals("")) {
             throw new RuntimeException("Nome do usuario informado é inválido");
         }
         Optional<UserEntity> optValue = repository.findByUsername(userEntity.getUsername());
@@ -37,7 +37,7 @@ public class UserService {
             throw new RuntimeException("Nome do usuario já está em uso");
         }
 
-        if(userEntity.getPassword() != null) {
+        if(userEntity.getPassword() == null) {
             throw new RuntimeException("Senha do usuario não informada");
         }
 
