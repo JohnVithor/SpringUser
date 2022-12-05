@@ -13,12 +13,10 @@ import java.util.Optional;
 @Service
 public class UserService {
 
+    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    private final UserRepository repository;
     @Value("${security.check-password-strength}")
     private Boolean checkPasswordStrength;
-
-    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-
-    private final UserRepository repository;
 
     @Autowired
     public UserService(UserRepository repository) {
@@ -26,35 +24,33 @@ public class UserService {
     }
 
     public UserEntity save(UserEntity userEntity) {
-        if(userEntity.getUsername() == null) {
+        if (userEntity.getUsername() == null) {
             throw new RuntimeException("Nome do usuario não informado");
         }
-        if(userEntity.getUsername().trim().equals("")) {
+        if (userEntity.getUsername().trim().equals("")) {
             throw new RuntimeException("Nome do usuario informado é inválido");
         }
         Optional<UserEntity> optValue = repository.findByUsername(userEntity.getUsername());
-        if(optValue.isPresent()) {
+        if (optValue.isPresent()) {
             throw new RuntimeException("Nome do usuario já está em uso");
         }
-
-        if(userEntity.getPassword() == null) {
+        if (userEntity.getPassword() == null) {
             throw new RuntimeException("Senha do usuario não informada");
         }
-
-        if (checkPasswordStrength){
-            if(userEntity.getPassword().length() < 8) {
+        if (checkPasswordStrength) {
+            if (userEntity.getPassword().length() < 8) {
                 throw new RuntimeException("Senha do usuario possui menos de 8 caracteres");
             }
             boolean up = false;
             boolean low = false;
             boolean digit = false;
             boolean special = false;
-            for (char c: userEntity.getPassword().toCharArray()) {
-                if(Character.isUpperCase(c))
+            for (char c : userEntity.getPassword().toCharArray()) {
+                if (Character.isUpperCase(c))
                     up = true;
-                else if(Character.isLowerCase(c))
+                else if (Character.isLowerCase(c))
                     low = true;
-                else if(Character.isDigit(c))
+                else if (Character.isDigit(c))
                     digit = true;
                 else
                     special = true;
@@ -89,7 +85,7 @@ public class UserService {
     public ResponseEntity<UserEntity> auth(LoginDTO loginDTO) {
         Optional<UserEntity> optionalUser = repository.findByUsername(loginDTO.getUsername());
         if (optionalUser.isPresent()) {
-            if(encoder.matches(loginDTO.getPassword(), optionalUser.get().getPassword())){
+            if (encoder.matches(loginDTO.getPassword(), optionalUser.get().getPassword())) {
                 return ResponseEntity.ok(optionalUser.get());
             }
         }
