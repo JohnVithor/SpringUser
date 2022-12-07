@@ -15,28 +15,37 @@
     <description>SpringUser</description>
     <properties>
         <java.version>19</java.version>
-        <spring-cloud.version>2022.0.0-RC2</spring-cloud.version>
+        <spring-cloud-dep.version>2022.0.0-RC2</spring-cloud-dep.version>
+        <spring-cloud.version>4.0.0-RC2</spring-cloud.version>
+        <spring.version>3.0.0</spring.version>
+        <resilience4j.version>1.7.0</resilience4j.version>
     </properties>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
-            <version>3.0.0</version>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+            <version>${spring.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <version>3.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-config</artifactId>
-            <version>4.0.0-RC2</version>
+            <version>${spring.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
-            <version>3.0.0</version>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <version>${spring.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
@@ -50,30 +59,44 @@
             <version>8.0.0.Final</version>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <version>3.0.0</version>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-config</artifactId>
+            <version>${spring-cloud.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-loadbalancer</artifactId>
-            <version>4.0.0-RC2</version>
+            <version>${spring-cloud.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-            <version>4.0.0-RC2</version>
+            <version>${spring-cloud.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
-            <version>4.0.0-RC2</version>
+            <version>${spring-cloud.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <version>3.0.0</version>
-            <scope>test</scope>
+            <groupId>io.github.resilience4j</groupId>
+            <artifactId>resilience4j-spring-boot2</artifactId>
+            <version>${resilience4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.resilience4j</groupId>
+            <artifactId>resilience4j-circuitbreaker</artifactId>
+            <version>${resilience4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.resilience4j</groupId>
+            <artifactId>resilience4j-timelimiter</artifactId>
+            <version>${resilience4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-circuitbreaker-resilience4j</artifactId>
+            <version>3.0.0-RC3</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
@@ -86,7 +109,7 @@
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring-cloud.version}</version>
+                <version>${spring-cloud-dep.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
