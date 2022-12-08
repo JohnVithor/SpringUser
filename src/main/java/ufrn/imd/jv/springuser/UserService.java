@@ -14,12 +14,14 @@ import java.util.Optional;
 public class UserService {
 
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    private final UserResilience resilience;
     private final UserRepository repository;
     @Value("${security.check-password-strength}")
     private Boolean checkPasswordStrength;
 
     @Autowired
-    public UserService(UserRepository repository) {
+    public UserService(UserResilience resilience, UserRepository repository) {
+        this.resilience = resilience;
         this.repository = repository;
     }
 
@@ -38,34 +40,9 @@ public class UserService {
             throw new RuntimeException("Senha do usuario não informada");
         }
         if (checkPasswordStrength) {
-            if (userEntity.getPassword().length() < 8) {
-                throw new RuntimeException("Senha do usuario possui menos de 8 caracteres");
-            }
-            boolean up = false;
-            boolean low = false;
-            boolean digit = false;
-            boolean special = false;
-            for (char c : userEntity.getPassword().toCharArray()) {
-                if (Character.isUpperCase(c))
-                    up = true;
-                else if (Character.isLowerCase(c))
-                    low = true;
-                else if (Character.isDigit(c))
-                    digit = true;
-                else
-                    special = true;
-            }
-            if (!up) {
-                throw new RuntimeException("Senha do usuario deve possuir um caractere maiusculo");
-            }
-            if (!low) {
-                throw new RuntimeException("Senha do usuario deve possuir um caractere minusculo");
-            }
-            if (!digit) {
-                throw new RuntimeException("Senha do usuario deve possuir um digito");
-            }
-            if (!special) {
-                throw new RuntimeException("Senha do usuario deve possuir um caractere especial");
+            String response = resilience.validatePassword(userEntity.getPassword());
+            if (!response.equals("OK")) {
+                throw new RuntimeException(response);
             }
         }
         userEntity.setPassword(encoder.encode(userEntity.getPassword()));
